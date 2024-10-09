@@ -1,0 +1,186 @@
+{
+	"info": {
+		"_postman_id": "a08d9459-16e9-4d22-aca1-aa39c4b866a2",
+		"name": "ksql",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "info",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.remove('Content-Type');"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ksql-host}}:{{ksql-port}}/info",
+					"host": [
+						"{{ksql-host}}"
+					],
+					"port": "{{ksql-port}}",
+					"path": [
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "preparation statements",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ksql\": \"CREATE STREAM SAMPLE_STREAM (Year VARCHAR, Industry_aggregation_NZSIOC VARCHAR, Industry_code_NZSIOC VARCHAR, Industry_name_NZSIOC VARCHAR, Units VARCHAR, Variable_code VARCHAR, Variable_name VARCHAR, Variable_category VARCHAR, Value VARCHAR, Industry_code_ANZSIC06 VARCHAR) WITH (KAFKA_TOPIC = 'SAMPLE_TOPIC',KEY_FORMAT = 'KAFKA',VALUE_FORMAT = 'JSON',PARTITIONS = 8,RETENTION_MS = 30000);\",\r\n    \"streamsProperties\": {}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ksql-host}}:{{ksql-port}}/ksql",
+					"host": [
+						"{{ksql-host}}"
+					],
+					"port": "{{ksql-port}}",
+					"path": [
+						"ksql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "terminate query",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ksql\": \"TERMINATE ALL;\",\r\n    \"streamsProperties\": {}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ksql-host}}:{{ksql-port}}/ksql",
+					"host": [
+						"{{ksql-host}}"
+					],
+					"port": "{{ksql-port}}",
+					"path": [
+						"ksql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "clean up",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ksql\": \"DROP STREAM SAMPLE_STREAM DELETE TOPIC;\",\r\n    \"streamsProperties\": {}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ksql-host}}:{{ksql-port}}/ksql",
+					"host": [
+						"{{ksql-host}}"
+					],
+					"port": "{{ksql-port}}",
+					"path": [
+						"ksql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "terminate cluster",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ksql-host}}:{{ksql-port}}/ksql/terminate",
+					"host": [
+						"{{ksql-host}}"
+					],
+					"port": "{{ksql-port}}",
+					"path": [
+						"ksql",
+						"terminate"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{ksql-secret}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{ksql-key}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.request.headers.add({key: 'Accept', value: 'application/vnd.ksql.v1+json' });",
+					"pm.request.headers.add({key: 'Content-Type', value: 'application/vnd.ksql.v1+json' });"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

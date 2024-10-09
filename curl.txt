@@ -1,0 +1,40 @@
+curl --location --request GET 'https://<<provide_host>>:443/info' \
+--header 'Authorization: Basic <<provide_auth>>' \
+--header 'Accept: application/vnd.ksql.v1+json'
+
+
+curl --location --request POST 'https://<<provide_host>>:443/ksql' \
+--header 'Authorization: Basic <<provide_auth>>' \
+--header 'Accept: application/vnd.ksql.v1+json' \
+--header 'Content-Type: application/vnd.ksql.v1+json' \
+--data-raw '{
+    "ksql": "CREATE STREAM SAMPLE_STREAM (Year VARCHAR, Industry_aggregation_NZSIOC VARCHAR, Industry_code_NZSIOC VARCHAR, Industry_name_NZSIOC VARCHAR, Units VARCHAR, Variable_code VARCHAR, Variable_name VARCHAR, Variable_category VARCHAR, Value VARCHAR, Industry_code_ANZSIC06 VARCHAR) WITH (KAFKA_TOPIC = '\''SAMPLE_TOPIC'\'',KEY_FORMAT = '\''KAFKA'\'',VALUE_FORMAT = '\''JSON'\'',PARTITIONS = 8,RETENTION_MS = 30000);",
+    "streamsProperties": {}
+}'
+
+
+curl --location --request POST 'https://<<provide_host>>:443/ksql' \
+--header 'Authorization: Basic <<provide_auth>>' \
+--header 'Accept: application/vnd.ksql.v1+json' \
+--header 'Content-Type: application/vnd.ksql.v1+json' \
+--data-raw '{
+    "ksql": "TERMINATE ALL;",
+    "streamsProperties": {}
+}'
+
+
+curl --location --request POST 'https://<<provide_host>>:443/ksql' \
+--header 'Authorization: Basic <<provide_auth>>' \
+--header 'Accept: application/vnd.ksql.v1+json' \
+--header 'Content-Type: application/vnd.ksql.v1+json' \
+--data-raw '{
+    "ksql": "DROP STREAM SAMPLE_STREAM DELETE TOPIC;",
+    "streamsProperties": {}
+}'
+
+
+curl --location --request POST 'https://<<provide_host>>:443/ksql/terminate' \
+--header 'Authorization: Basic <<provide_auth>>' \
+--header 'Accept: application/vnd.ksql.v1+json' \
+--header 'Content-Type: application/vnd.ksql.v1+json' \
+--data-raw '{}'
